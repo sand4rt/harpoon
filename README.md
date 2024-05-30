@@ -111,6 +111,15 @@ local function toggle_telescope(harpoon_files)
         }),
         previewer = conf.file_previewer({}),
         sorter = conf.generic_sorter({}),
+        attach_mappings = function(prompt_bufnr, map)
+            map({ "i", "n" }, "<c-d>", function()
+                local picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
+                picker:delete_selection(function(selection)
+                    harpoon:list():remove(harpoon:list():get(selection.index))
+                end)
+            end)
+            return true
+        end,
     }):find()
 end
 
